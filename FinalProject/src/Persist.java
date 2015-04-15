@@ -6,17 +6,19 @@ import java.io.ObjectOutputStream;
 public class Persist 
 {
 	
-	public void persist(TST ternarySearchTree) throws IOException 
+	public void persist(TST ternarySearchTree, Synonyms synon, Meanings mean) throws IOException 
     {
-		// TODO Write the list Object to a file called "student.txt".
-/*		FileOutputStream fos = new FileOutputStream("dictionary.txt");
+		// TODO Write the created Ternary Search Tree to a file called "dictionary.txt".
+		
+		FileOutputStream fos = new FileOutputStream("dictionary.txt");
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		
 		oos.writeObject(ternarySearchTree);
+		oos.writeObject(synon);
+		oos.writeObject(mean);
 		
 		oos.flush();
 		oos.close();
- */
-	}
-	
+
+	}	
 }

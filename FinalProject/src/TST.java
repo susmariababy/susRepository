@@ -18,17 +18,8 @@ public class TST implements Serializable
 	        return get(key) != -1;
 	    }
 	    
-	    public int get(String key) 
-	    {								// returns -1 if the string is not found
-	    								// else returns the id
-	        if (key == null) throw new NullPointerException();
-	        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
-	        Node x = get(root, key, 0);
-	        if (x == null) return -1;
-	        return x.id;
-	    }
 	    
-	    								// return sub-Trie corresponding to given key
+	    								// return root of the sub-Trie corresponding to given string key
 	    private Node get(Node x, String key, int d) 
 	    {
 	        if (key == null) throw new NullPointerException();
@@ -40,8 +31,18 @@ public class TST implements Serializable
 	        else if (d < key.length() - 1) return get(x.mid,   key, d+1);
 	        else                           return x;
 	    }
+	    
+	    public int get(String key) 
+	    {								// returns -1 if the string is not found
+	    								// else returns the id
+	        if (key == null) throw new NullPointerException();
+	        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+	        Node x = get(root, key, 0);
+	        if (x == null) return -1;
+	        return x.id;
+	    }
 
-	    private Node insert (Node x, String key, int val, int index) 
+	    public Node insert (Node x, String key, int val, int index) 
 	    {
 	        char c = key.charAt(index);
 	        if (x == null) 
@@ -88,7 +89,7 @@ public class TST implements Serializable
 	    {
 	        if (node == null)
 	        {
-	        	System.out.println ("yo");
+	 //       	System.out.println ("yo");
 	        	return -2;
 	        }
 	        
@@ -120,10 +121,10 @@ public class TST implements Serializable
 					queue.add(temp.mid);
 				if (temp.right != null)
 					queue.add(temp.right);
-				if (temp.ch != 'z')
+				if (temp.ch != '#')
 				{
 					temp  = new Node();
-					temp.ch = 'z';
+					temp.ch = '#';
 					queue.add(temp);
 				}
 				System.out.print(queue.poll().ch + " ");
@@ -131,27 +132,30 @@ public class TST implements Serializable
 			System.out.println();
 		}
 	    
-	    public static void main (String[] args) throws IOException
+	    public static void main (String[] args) throws IOException, ClassNotFoundException
 	    {
 	    	TST tst = new TST();
-	    	Scanner  c = new Scanner(System.in);
-	    	String str = c.nextLine();
-	    	int i = 1;			// note that I am starting the ids from 1
-	    	while (!str.equals("end"))
-	    	{
-	    		tst.root = tst.insert(tst.root, str, i , 0);
-	    		i++;
-	    		str = c.nextLine();
-	    	}
+	    	Synonyms syno = new Synonyms();
+	    	Meanings mean = new Meanings();
+	    	
+	    	tst = GetWordsWithIDs.addWords(tst, syno , mean);
+	    			// here we add all the words to the TST tst , and also add all synonyms to
+	    			// the arraylist of linked list of Strings 'syn'
+	    	
 	    	
 	    //	tst.printBfs();
 	    	Persist persist = new Persist();
-	    	persist.persist(tst);
+	    	persist.persist(tst, syno, mean);
 	    	
-	    	System.out.println (tst.searchTST(tst.root, "able"));
-	    	System.out.println (tst.searchTST(tst.root, "acad"));
-	    	System.out.println (tst.searchTST(tst.root, "adam"));
-	    	System.out.println (tst.searchTST(tst.root, "agile"));
-	    	System.out.println (tst.searchTST(tst.root, "acd"));
+	    	Scanner c = new Scanner(System.in);
+	    	String str = c.next();
+	    	while (!str.equals("end"))
+	    	{
+	    		int index = tst.searchTST(tst.root, str);
+	    		System.out.println(index);
+	    		syno.printAllSynonyms(index, str);
+	    		mean.printMeaning(index);
+	    		str = c.next();
+	    	}
 	    }
 }
