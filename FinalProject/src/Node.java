@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.LinkedList;
 
 
 public class Node implements Serializable
@@ -7,10 +8,10 @@ public class Node implements Serializable
 	
 	public char ch;                        // character
      public Node left, mid, right;  // left, middle, and right sub-Tries
-     public int id;					// id associated with the given word   
+     public LinkedList <Integer> id;					// id associated with the given word   
      
      Node ()						// default constructor to initialize the id to zero
      {
-    	 this.id = -1;
+    	 this.id = null;
      }
 }

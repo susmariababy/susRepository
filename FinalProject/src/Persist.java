@@ -19,6 +19,5 @@ public class Persist
 		
 		oos.flush();
 		oos.close();
-
 	}	
 }

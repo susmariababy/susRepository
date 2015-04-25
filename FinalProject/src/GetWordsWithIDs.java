@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class GetWordsWithIDs 
 {
-	public static TST addWords ( TST tst , Synonyms synon, Meanings mean) throws IOException, ClassNotFoundException 
+	public TST addWords ( TST tst , Synonyms synon, Meanings mean) throws IOException, ClassNotFoundException 
 	{	
 		
 		BufferedReader brR = new BufferedReader(new FileReader("words.txt"));
@@ -47,13 +47,12 @@ public class GetWordsWithIDs
 				mean.meaning.add("");
 			
 			int h = 1;
-			str = "";
+			str = mean.meaning.get(id);
 			while (h < words.length)
 			{
 				str = str + words[h] + " ";
 				h++;
 			}
-
 			mean.meaning.set(id, str);
 		}
 		
