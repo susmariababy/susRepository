@@ -1,0 +1,20 @@
+Planned improvements for the SpellCheck :
+
+We can assume a tolerance of 2 in the Levenshtein distance
+
+done 1.Print words that are at a closer Levenshtein distance first
+2.Try to build a probablistic model to find out the most common spelling errors like
+	(Rank to be assigned to the various errors)
+	done 0. if the letters are neighbours in Qwerty Keyboard
+	done 1. Transpositioning a vowel (example "bannet" instead of "bonnet")
+	done 2. Dropping vowels ("mistke" instead of "mistake")  
+	3. swapping 2 adjacent letters is more probable than swapping 2 letters in some other indices(d = 2)
+	done 4. any other error
+
+
+If done with the above mentioned heuristics
+go for
+
+1. assigning weights depending on the vowel that was dropped or transpositioned
+
+	//serialising the BK tree
