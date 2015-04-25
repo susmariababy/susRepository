@@ -1,3 +1,6 @@
+import java.util.PriorityQueue;
+
+
 
 public class NodeFunctions {
 	//A function to compute Levenshtein ditance of 2 strings
@@ -45,21 +48,49 @@ public class NodeFunctions {
 	}
 	
 	//A recursive function that lists all strings from the given string within a given tolerance (Levenshtein distance)
-	public static void spellCheck(Node root,String str,int tolerance){
+	public static void spellCheck(Node root,String str,int tolerance,PriorityQueue<order> misSpelt,char[][] neighbour){
 		int d = levenshteinDistance(str, root.word);
 		int i;
+		int j;
 		if(d<=tolerance){
-			System.out.println(root.word+" "+d);
+			order e = new order(root.word,d);
+			if(root.word.length()==str.length()){ //implies the letters were just transpositioned //check if the characters are neighbours in the keyboard
+					for(j=0;j<root.word.length();j++){
+						if(root.word.charAt(j)!=str.charAt(j)){
+							if(neighbour[str.charAt(j)-97][0]==root.word.charAt(j)||neighbour[str.charAt(j)-97][1]==root.word.charAt(j)){
+								e.rank = 0; //if the letters are neighbours in the qwerty keyboard,give the highest rank
+							}
+							else{ //if the transpositioned letters are vowels , then assign a rank of 1
+								if(root.word.charAt(j)=='a'||root.word.charAt(j)=='e'||root.word.charAt(j)=='i'||root.word.charAt(j)=='o'||root.word.charAt(j)=='u'||str.charAt(j)=='a'||str.charAt(j)=='e'||str.charAt(j)=='i'||str.charAt(j)=='o'||str.charAt(j)=='u'){
+									e.rank = 1;
+								}
+							}
+						}
+					}
+			}
+			else{
+				int min = Math.min(root.word.length(),str.length());
+				int max = Math.max(root.word.length(),str.length());
+				for(j=0;j<min;j++){
+					if(root.word.charAt(j)!=str.charAt(j)){ //when we miss out the vowels in the words
+						if(root.word.charAt(j)=='a'||root.word.charAt(j)=='e'||root.word.charAt(j)=='i'||root.word.charAt(j)=='o'||root.word.charAt(j)=='u'||str.charAt(j)=='a'||str.charAt(j)=='e'||str.charAt(j)=='i'||str.charAt(j)=='o'||str.charAt(j)=='u'){
+							e.rank = 2;
+							break;
+					}
+				}
+				}	
+			}
+			misSpelt.add(e);
 			for(i=1;i<=tolerance+d;i++){
 				if(root.Children[i]!=null){
-					spellCheck(root.Children[i], str, tolerance);
+					spellCheck(root.Children[i], str, tolerance,misSpelt,neighbour);
 				}
 			}
 		}
 		else{
 			for(i=d-tolerance;i<=tolerance+d;i++){
 				if(root.Children[i]!=null){
-					spellCheck(root.Children[i], str, tolerance);
+					spellCheck(root.Children[i], str, tolerance,misSpelt,neighbour);
 				}
 			}
 		}
