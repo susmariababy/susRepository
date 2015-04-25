@@ -1,17 +1,13 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Vector;
-import java.util.Arrays;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -31,11 +27,12 @@ public class Gui2 {
 	JFrame frame;
 	JPanel panel;
 	JTextField wordTextField;
-	JLabel wordLabel, synonymLabel, meaningLabel;
+	JLabel synonymLabel, meaningLabel;
 	TST tst;
 	Synonyms syno;
 	Meanings mean;
 	String[] allWords;
+	int parity = 0;
 	
 	private Vector<String> data; 
 
@@ -54,9 +51,9 @@ public class Gui2 {
 		persist.persist(tst, syno, mean);
 
 		ArrayList<String> list = new ArrayList<String>();
-		allWords = new String[146212];
+		allWords = new String[144894];
 		tst = gwi.addWords(tst, syno, mean,allWords);
-		for (int p = 0 ; p < 146212; p++)
+		for (int p = 0 ; p < 144894; p++)
 			list.add(allWords[p]);
 		
 		java.util.Collections.sort(list);
@@ -66,7 +63,7 @@ public class Gui2 {
 		frame.setMinimumSize(new Dimension(600, 300));
 		panel = new JPanel();
 
-		JFrame frame = new JFrame("Dictionary");
+		final JFrame frame = new JFrame("Dictionary");
 		frame.add(list(), BorderLayout.WEST);
 		frame.add(editPanel());
 
@@ -95,7 +92,7 @@ public class Gui2 {
 					typeString = "Insert";
 				} else if (type.equals(DocumentEvent.EventType.REMOVE)) {
 					typeString = "Remove";
-				}
+				} 
 				System.out.print("Type : " + typeString);
 				Document source = documentEvent.getDocument();
 				int length = source.getLength();
@@ -104,14 +101,32 @@ public class Gui2 {
 					actionPerformedNumber1();
 					actionPerformedNumber2();
 				}
+				
 				else
 				{
 					synonymLabel.setText("Word does not exist");
 					meaningLabel.setText("Word does not exist");
 				}
+				
+				if (tst.search2(tst.root, wordTextField.getText().toLowerCase()) != null && parity != 1)
+				{
+					LinkedList<String> lll = new LinkedList<String>();
+					lll = tst.keysWithPrefix(wordTextField.getText().toLowerCase());
+					data = new Vector<String>(lll);
+		//			frame.removeAll();
+		//			frame.setMinimumSize(new Dimension (600,300));
+		//			frame.revalidate();
+		//			frame.repaint();
+					frame.add(list(), BorderLayout.WEST);
+		//			frame.add(editPanel());
+		//			frame.revalidate();
+		//			frame.repaint();
+				}
+				parity = 0;
 			}
 		};
 		wordTextField.getDocument().addDocumentListener(documentListener);
+//            f  nb 		wordTextField.getKeyListeners().
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(600, 300));
@@ -173,14 +188,20 @@ public class Gui2 {
 	}
 
 	private JComponent list() {
-		final JList list = new JList(data);
-		list.addListSelectionListener(new ListSelectionListener() {
+		final JList<String> lllist = new JList<String>(data);
+		lllist.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				int i = list.getSelectedIndex();
+				parity = 1;
+				int i = lllist.getSelectedIndex();
 				wordTextField.setText(i >= 0 ? data.get(i) : "");
+	//			actionPerformedNumber1();
+	//			actionPerformedNumber2();
 			}
 		});
-		return new JScrollPane(list);
+//		JScrollPane jsp = new JScrollPane(lllist);
+//		jsp.setMaximumSize(new Dimension(200,300));
+//		return jsp;
+		return new JScrollPane(lllist);
 	}
 
 	private JComponent editPanel() {

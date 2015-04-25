@@ -131,6 +131,27 @@ public class TST implements Serializable {
 			return searchTST(node.mid, word.substring(1));
 		}
 	}
+	
+	public Node search2(Node node, String word)
+	{
+		if (node == null) {
+			return null;
+		}
+
+		if (word.charAt(0) < node.ch)
+			return search2(node.left, word);
+
+		else if (word.charAt(0) > node.ch)
+			return search2(node.right, word);
+		
+		else // if word.charAt(0) == node.ch
+		{
+			if (word.length() == 1) // ie, if this word has got only a single
+									// letter
+				return node;
+			return search2(node.mid, word.substring(1));
+		}
+	}
 
 	public void printBfs() // using the standard queue technique
 	{
@@ -157,14 +178,14 @@ public class TST implements Serializable {
 	public LinkedList<String> keysWithPrefix (String prefix) 
 	{
 		LinkedList<String> queue = new LinkedList<String>();
-		String suffix = null;
+		String suffix = prefix;
 		Node x = get(root, prefix, 0); // x now has got the subtree
 										// corresponding to 'prefix'
 		if (x == null)
 			return queue;
 
 		queue.add(prefix);
-		printSuffix(x.mid, suffix, 0, queue);
+		printSuffix(x.mid, suffix, prefix.length(), queue);
 		
 		return queue;
 	}
@@ -180,9 +201,7 @@ public class TST implements Serializable {
 			return;
 	     
 		String c = node.ch + "";
-		if (suffix == null)
-			suffix = c;
-		else
+		
 			suffix = suffix.subSequence(0, len) + c;
 	     
 	      /* it's a leaf, so print the path that led to here  */

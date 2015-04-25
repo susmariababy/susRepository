@@ -27,7 +27,7 @@ public class GetWordsWithIDs
 			while (id >= synon.syn.size())	
 				synon.syn.add(new LinkedList<String>());
 
-			str = words[1];
+			str = words[1].toLowerCase();
 			{
 				if (tst.searchTST(tst.root, str) == null)
 				allWords[wordCount++] = str;
