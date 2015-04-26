@@ -61,8 +61,8 @@ public class myGUI {
 	      controlPanel.setLayout(new FlowLayout());
 	      mPanel.setLayout(new FlowLayout());
 	      sPanel.setLayout(new FlowLayout());
-	      moPanel.setLayout(new FlowLayout());
-	      soPanel.setLayout(new FlowLayout());
+	      moPanel.setLayout(new BorderLayout());
+	      soPanel.setLayout(new BorderLayout());
 	     
 	      
 	      mainFrame.add(headerLabel);
@@ -149,12 +149,14 @@ public class myGUI {
 				meany = "";
 				int p = 0;
 				int k = 1;
-				while (p < index.size()) {
+				while (p < index.size()-1) {
 					System.out.print(index.get(p) + " ");
 					meany = meany+ k++ + ". "
 							+ mean.printMeaning(index.get(p))+"\r\n" ; 
 					p++;
 				}
+				meany = meany+ k++ + ". "
+						+ mean.printMeaning(index.get(p));
 			}
 			gloss.setText(meany);
 			gloss.setEditable(false);
@@ -172,7 +174,7 @@ public class myGUI {
 				int p = 0;
 				int j = 1;
 				synony = "";
-				while (p < index.size()) {
+				while (p < index.size()-1) {
 					System.out.print(index.get(p) + " ");
 					if (!syno.printAllSynonyms(index.get(p), str).equals("")) {
 						synony = synony + j + ". "
@@ -181,6 +183,8 @@ public class myGUI {
 					}
 					p++;
 				}
+				synony = synony + j + ". "
+						+ syno.printAllSynonyms(index.get(p), str);
 				if (synony.equals(""))
 					synony = synony + "No synonyms found";
 			}
