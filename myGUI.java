@@ -151,12 +151,13 @@ public class myGUI {
 				int k = 1;
 				while (p < index.size()) {
 					System.out.print(index.get(p) + " ");
-					meany = meany + "\r\n" + k++ + ". "
-							+ mean.printMeaning(index.get(p)); 
+					meany = meany+ k++ + ". "
+							+ mean.printMeaning(index.get(p))+"\r\n" ; 
 					p++;
 				}
 			}
 			gloss.setText(meany);
+			gloss.setEditable(false);
 			mPane.getViewport().add(gloss);
 			}
 	   
@@ -174,8 +175,8 @@ public class myGUI {
 				while (p < index.size()) {
 					System.out.print(index.get(p) + " ");
 					if (!syno.printAllSynonyms(index.get(p), str).equals("")) {
-						synony = synony + "\r\n" + j + ". "
-								+ syno.printAllSynonyms(index.get(p), str); 
+						synony = synony + j + ". "
+								+ syno.printAllSynonyms(index.get(p), str)+"\r\n"; 
 						j++;
 					}
 					p++;
@@ -184,6 +185,7 @@ public class myGUI {
 					synony = synony + "No synonyms found";
 			}
 			Syn.setText(synony);
+			Syn.setEditable(false);
 			sPane.getViewport().add(Syn);
 			
 	   }
